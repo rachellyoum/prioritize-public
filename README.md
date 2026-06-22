@@ -14,6 +14,10 @@ The application is deployed on Render and is accessible here:
 
 ---
 
+## Demo
+
+[Watch the demo video](./demo.mp4)
+
 ## Key Features
 
 ### 1. User Task Management
