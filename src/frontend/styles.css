@@ -1,0 +1,701 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #15151c 0, #050509 35%, #050509 100%);
+    color: #f9fafb;
+    line-height: 1.5;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* GLOBAL LAYOUT HELPERS */
+.hero,
+.task-card,
+.tools-grid {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+/* NAVBAR */
+.menu {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(16px);
+    background: linear-gradient(to right, rgba(7,7,10,0.85), rgba(9,9,12,0.85));
+    box-shadow: 0 14px 40px rgba(0,0,0,0.65);
+}
+
+.menu ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 14px 40px;
+    margin: 0;
+    max-width: 1200px;
+    margin-inline: auto;
+}
+
+.menu h1 {
+    color: #f9fafb;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.menu ul li {
+    list-style: none;
+}
+
+.menu ul li a {
+    color: #e5e7eb;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 6px 4px;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+    position: relative;
+}
+
+.menu ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, #79d9ff, #38bdf8);
+    bottom: -4px;
+    left: 0;
+    box-shadow: 0 0 14px rgba(121,217,255,0.8);
+    transition: width 0.25s ease;
+}
+
+.menu ul li a:hover {
+    color: #79d9ff;
+    text-shadow: 0 0 10px rgba(121,217,255,0.8);
+}
+
+.menu ul li a:hover::after {
+    width: 100%;
+}
+
+#Home {
+    scroll-margin-top: 200px;
+}
+
+/* HERO SECTION */
+.hero {
+    padding-top: 130px;
+    padding-bottom: 90px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    background: linear-gradient(to right, #ffffff, #79d9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 19px;
+    color: #d1d5db;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* TASK CARD (GLASSMORPHISM) */
+
+#Tasks {
+    scroll-margin-top: 100px;
+}
+.task-card {
+    background: radial-gradient(circle at top left, rgba(59,130,246,0.12), transparent 55%),
+                rgba(15,15,20,0.92);
+    border: 1px solid rgba(148,163,184,0.35);
+    backdrop-filter: blur(24px);
+    max-width: 1100px;
+    margin: 40px auto 80px auto;
+    padding: 32px 28px 30px;
+    border-radius: 22px;
+    box-shadow: 0 22px 60px rgba(0,0,0,0.85);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 72px rgba(15,23,42,0.95);
+    border-color: rgba(129,140,248,0.55);
+}
+
+.task-card h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #f9fafb;
+}
+
+/* TASK BUTTONS */
+.task-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.create-task-button,
+.delete-task-button,
+.edit-task-button {
+    background: radial-gradient(circle at top, #4b5563, #1f2933);
+    color: #f9fafb;
+    border: 1px solid rgba(148,163,184,0.35);
+    padding: 9px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+}
+
+.create-task-button:hover,
+.delete-task-button:hover,
+.edit-task-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,130,246,0.55);
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    border-color: rgba(191,219,254,0.85);
+}
+
+.edit-task-button {
+    margin-left: 0; /* flex gap handles spacing */
+}
+
+/* TABLE */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    color: #f3f4f6;
+}
+
+.task-table th {
+    text-align: left;
+    font-size: 13px;
+    opacity: 0.75;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.task-table td {
+    padding: 12px 0;
+    border-top: 1px solid rgba(148,163,184,0.35);
+}
+
+.task-table tr:last-child td {
+    padding-bottom: 4px;
+}
+
+.task-table tr:hover {
+    background: linear-gradient(to right, rgba(15,23,42,0.85), rgba(30,64,175,0.65));
+}
+
+/* GENERATE BUTTON */
+.generate-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.generate-btn {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    color: #f9fafb;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+    box-shadow: 0 14px 36px rgba(56,189,248,0.4);
+}
+
+.generate-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 50px rgba(56,189,248,0.6);
+    filter: brightness(1.06);
+}
+
+/* SCHEDULE SECTION */
+
+#Schedule {
+    scroll-margin-top: 275px;
+}
+#Schedule h2 {
+    font-size: 42px;
+    text-align: center;
+    font-weight: 800;
+    margin-top: 40px;
+    margin-bottom: 24px;
+    background: linear-gradient(to right, #ffffff, #79d9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* TOOLS SECTION — CARDS */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 32px;
+    padding: 60px 32px 80px;
+    max-width: 1200px;
+    margin-top: 270px;
+}
+
+.tool-card {
+    background: radial-gradient(circle at top right, rgba(96,165,250,0.20), transparent 60%),
+                rgba(15,15,20,0.94);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(148,163,184,0.5);
+    border-radius: 22px;
+    padding: 26px 24px 22px;
+    position: relative;
+    text-align: left;
+    box-shadow: 0 22px 60px rgba(0,0,0,0.9);
+    transition: transform 0.27s ease, box-shadow 0.27s ease, border-color 0.27s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 80px rgba(15,23,42,0.95);
+    border-color: rgba(129,140,248,0.85);
+}
+
+.tool-card:hover .tool-image {
+    transform: scale(1.04);
+}
+
+/* If you have an image div inside tool-card */
+.tool-image {
+    position: absolute;
+    inset: 0 auto auto 0;
+    opacity: 0.14;
+    filter: blur(1px);
+    pointer-events: none;
+    transition: transform 0.27s ease, opacity 0.27s ease;
+}
+
+/* TEXT CONTENT INSIDE TOOL CARD */
+.tool-content {
+    position: relative;
+    margin-top: 8px;
+}
+
+.tool-content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #f9fafb;
+    margin-bottom: 10px;
+}
+
+.tool-content p {
+    font-size: 15px;
+    color: #d1d5db;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+/* TOOL BUTTON */
+.tool-btn1 {
+    background: radial-gradient(circle at top, #4b5563, #111827);
+    color: #f9fafb;
+    border: 1px solid rgba(148,163,184,0.55);
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.7);
+}
+
+.tool-btn1:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    border-color: rgba(191,219,254,0.9);
+    box-shadow: 0 12px 34px rgba(37,99,235,0.8);
+}
+
+.tool-btn2 {
+    background: radial-gradient(circle at top, #4b5563, #111827);
+    color: #f9fafb;
+    border: 1px solid rgba(148,163,184,0.55);
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.7);
+    margin-top: 20px;
+}
+
+.tool-btn2:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    border-color: rgba(191,219,254,0.9);
+    box-shadow: 0 12px 34px rgba(37,99,235,0.8);
+}
+
+/* RESPONSIVE TWEAKS */
+@media (max-width: 900px) {
+    .hero h1 {
+        font-size: 44px;
+    }
+
+    .hero {
+        padding-top: 110px;
+        padding-bottom: 70px;
+    }
+
+    .task-card {
+        padding: 26px 22px 24px;
+    }
+
+    .menu ul {
+        padding-inline: 24px;
+        gap: 18px;
+    }
+}
+
+@media (max-width: 640px) {
+    .menu ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu h1 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .hero,
+    .task-card,
+    .tools-grid {
+        padding-inline: 20px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    #Schedule h2 {
+        font-size: 32px;
+    }
+
+    .task-button-row {
+        justify-content: flex-start;
+    }
+}
+
+
+/* Make top row = 3 columns and mutual card full width */
+.tools-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 270px; /* keep your existing spacing */
+}
+
+.mutual-card {
+    grid-column: 1 / 4; /* spans all three columns */
+    padding: 32px;
+}
+
+/* Friend List & Requests */
+.friend-list,
+.friend-requests {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.friend-item,
+.request-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friend-name {
+    font-size: 15px;
+    color: #e5e7eb;
+    font-weight: 500;
+}
+
+.request-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.small-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+}
+
+.decline-btn {
+    background: radial-gradient(circle at top, #5b1b1b, #3d0f0f);
+    border: 1px solid rgba(255,80,80,0.45);
+}
+
+.decline-btn:hover {
+    background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+    border-color: rgba(255,150,150,0.75);
+}
+
+/* Mutual Free Time */
+.mutual-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.long-select {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 14px;
+    border-radius: 14px;
+}
+
+.mutual-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mutual-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.mutual-display {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 20px 18px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+}
+
+#Tools {
+    scroll-margin-top: -280px;
+}
+
+#timerDisplay {
+    color: #79d9ff;
+    text-shadow: 0 0 12px rgba(121,217,255,0.8);
+}
+
+#analyticsContainer div {
+    background: rgba(255,255,255,0.05);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+#Productivity {
+    scroll-margin-top: -30px; /* ensures clean scroll position */
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+/* Ensure Productivity cards follow same styling */
+#Productivity .tool-card {
+    margin-top: 40px;
+}
+
+/* Study Timer display */
+#timerDisplay {
+    font-size: 32px;
+    margin-top: 20px;
+    font-weight: 700;
+    color: #79d9ff;
+    text-shadow: 0 0 12px rgba(121,217,255,0.8);
+}
+
+/* Analytics summary boxes */
+#taskSummary div,
+#daySummary div {
+    background: rgba(255,255,255,0.05);
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 8px;
+}
+
+/* Dropdown for analytics range */
+#analyticsRange {
+    max-width: 220px;
+}
+
+/* Force all Productivity cards to span full width */
+#Productivity .tool-card {
+    grid-column: 1 / 4 !important;
+}
+
+/* Fix grid behavior so Productivity cards do not break layout */
+.tools-grid section#Productivity {
+    grid-column: 1 / 4;
+    width: 100%;
+}
+
+/* Day dropdown: opened list uses black text */
+#avail-day option {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Time inputs – white text */
+#avail-start,
+#avail-end {
+    color: #e5e7eb !important;
+}
+
+/* Clock icon white */
+#avail-start::-webkit-calendar-picker-indicator,
+#avail-end::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.4);
+    opacity: 0.9;
+}
+
+.avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(121, 217, 255, 0.3);
+    margin-bottom: 15px;
+    background-color: #1f2933;
+}
+
+.avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin-right: 12px;
+}
+
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.info-group {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 300px;
+}
+
+.info-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #aaa;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.info-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    font-family: monospace;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    color: #79d9ff;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+    text-decoration: underline;
+}
+
+/* Ensures the list has a fixed height and scrolls internally */
+.scrollable-list {
+    max-height: 180px; /* Fixed height matching neighbors */
+    overflow-y: auto;  /* scrollbar appears when needed */
+    padding-right: 5px; /* space for scrollbar */
+}
+
+.scrollable-list::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollable-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+.scrollable-list::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+    background: #79d9ff;
+}
+
+/* FORCE VISIBLE CLOCK ICON ON MAC */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    /* Use a white SVG clock icon */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'); 
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 1;
+    display: block;
+    margin-left: 10px;
+}
+
+* FORCE NATIVE DARK MODE CONTROLS */
+input[type="time"], input[type="date"], select {
+    color-scheme: dark;
+}
+
+/* Ensure the calendar/clock icon is explicitly inverted (White) */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}

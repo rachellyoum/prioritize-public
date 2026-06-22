@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prioritize</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .menu {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: black;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      right: 0;
+    }
+    ul {
+      list-style-type: none;
+      display: flex;
+      gap: 20px;
+    }
+    section {
+      padding-top: 120px;
+      padding-bottom: 120px;
+      min-height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="menu">
+    <ul>
+      <li class="logo"><h1>Prioritize</h1></li>
+      <ul>
+        <li><a href="#Home">Home</a></li>
+        <li><a href="#Availability">Availability</a></li>
+        <li><a href="#Tasks">Tasks</a></li>
+        <li><a href="#Schedule">Schedule</a></li>
+        <li><a href="#Tools">Tools</a></li>
+        <li><a href="#Productivity">Productivity</a></li>
+        <li><a href="#Profile">Profile</a></li>
+        <li><a href="login.html">Log Out</a></li>
+      </ul>
+    </ul>
+  </div>
+
+  <!-- HOME -->
+  <section id="Home">
+    <div class="hero">
+      <h1>Generate optimized study plans</h1>
+      <p>
+        Get personalized recommendations based on your deadlines, grade
+        weights, difficulty levels, and availability.
+      </p>
+    </div>
+  </section>
+
+  <!-- AVAILABILITY CARD -->
+  <section id="Availability">
+    <div class="task-card"> 
+      <h2>Availability</h2>
+      <p style="color: #d1d5db; margin-bottom: 20px;">Define your recurring free time slots so the scheduler knows when to book tasks.</p>
+
+      <!-- Inputs -->
+      <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+        
+        <!-- Day Select -->
+        <div style="flex: 1; min-width: 200px;">
+          <select id="avail-day" class="friend-select"
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 12px;
+              background: rgba(255,255,255,0.05);
+              color: #e5e7eb;
+              border: 1px solid rgba(255,255,255,0.1);
+            ">
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+            <option value="Sunday">Sunday</option>
+          </select>
+        </div>
+
+        <!-- Time Inputs -->
+        <div style="flex: 2; display: flex; align-items: center; gap: 10px; min-width: 300px;">
+          
+            <input type="time" id="avail-start" required class="friend-select" 
+              style="width: 100%; padding: 10px; background: #1f2933; color: white; border: 1px solid #4b5563;">
+              
+            <span style="color: #aaa;">to</span>
+            
+            <input type="time" id="avail-end" required class="friend-select"
+              style="width: 100%; padding: 10px; background: #1f2933; color: white; border: 1px solid #4b5563;">
+        </div>
+
+      <button id="btn-add-avail" class="tool-btn1" style="width: 100%; margin-bottom: 25px; background: radial-gradient(circle at top, #4b5563, #1f2933); border: 1px solid rgba(148,163,184,0.35);">+ Add Free Slot</button>
+
+      <!-- List of existing slots -->
+      <div id="availability-list" style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="subtle-text">Loading slots...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TASKS -->
+  <section id="Tasks">
+    <div class="task-card">
+      <h2>User Task Management</h2>
+      <div class="task-button-row">
+        <button id="btn-create-task" class="create-task-button">+Create Task</button>
+        <button id="btn-delete-task" class="delete-task-button">-Delete Selected Tasks</button>
+        <button id="btn-edit-task" class="edit-task-button">Edit Selected Task</button>
+      </div>
+      <table id="taskTable" class="task-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Task</th>
+            <th>Deadline</th>
+            <th>Grade Weight</th>
+            <th>Difficulty</th>
+            <th>Est. Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+      </table>
+      <div class="generate-container">
+        <a href="#Schedule" class="generate-link">
+          <button class="generate-btn">Generate Schedule</button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="Schedule">
+    <h2>Generating Schedule...</h2>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="Tools">
+    <div class="tools-grid">
+      <!-- GOOGLE CALENDAR CARD -->
+      <div class="tool-card">
+        <div class="tool-content">
+          <h2>Export to External Calendar</h2>
+          <p>Send your schedule directly to your Google or Apple Calendar.</p>
+          <button id="btn-export-google" class="tool-btn1">Export to Google Calendar</button>
+          <button id="btn-export-apple" class="tool-btn2">Export to Apple Calendar</button>
+        </div>
+      </div>
+
+      <!-- FRIEND LIST CARD -->
+      <div class="tool-card">
+        <div class="tool-content">
+          <h2>Friend List</h2>
+          <p>View your friends and check their study schedules.</p>
+
+          <!-- Added 'scrollable-list' class for internal scrolling -->
+          <div id="friend-list-container" class="friend-list scrollable-list">
+            <div class="subtle-text">Loading friends...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FRIEND REQUESTS CARD (Now contains Add Friend) -->
+      <div class="tool-card">
+        <div class="tool-content">
+          <h2>Friend Requests</h2>
+          <p>Manage incoming requests or send new ones.</p>
+
+          <!-- Dynamic Requests Container (Scrollable) -->
+          <div id="friend-requests-container" class="friend-requests scrollable-list" style="margin-bottom: 20px;">
+            <div class="subtle-text">Loading requests...</div>
+          </div>
+
+          <!-- Add Friend Section (Moved Here) -->
+          <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <h3 style="font-size: 14px; margin-bottom: 8px; color: #79d9ff; text-transform: uppercase;">Send Request</h3>
+            <div style="display: flex; gap: 8px;">
+                <input type="number" id="add-friend-id" class="friend-select" placeholder="User ID" style="padding: 8px; border-radius: 8px; width: 100%; font-size: 13px;">
+                <button id="btn-send-request" class="tool-btn1 small-btn">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MUTUAL FREE TIME — FULL WIDTH -->
+      <div class="tool-card mutual-card">
+        <div class="mutual-container">
+          <!-- LEFT -->
+          <div class="mutual-left">
+            <h2>Mutual Free Time</h2>
+            <p>Select a friend to instantly compare free hours.</p>
+
+            <select class="friend-select long-select">
+              <option>Select a friend</option>
+              <option>name1</option>
+              <option>name2</option>
+              <option>name3</option>
+            </select>
+          </div>
+
+          <!-- RIGHT -->
+          <div class="mutual-right">
+            <h3 class="mutual-title">Shared Free Hours</h3>
+            <div class="mutual-display">
+              <p class="subtle-text">Mutual free hours will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- STUDY TIMER — FULL WIDTH -->
+    <section id="Productivity">
+
+      <div class="tool-card" style="grid-column: 1 / 4;">
+        <div class="tool-content">
+          <h2>Study Timer</h2>
+          <p>Track how long you study each task in real time.</p>
+
+          <!-- Task selector (auto-populated from task table) -->
+          <select id="timerTaskSelect" class="friend-select long-select">
+            <option value="">Select a task to study</option>
+          </select>
+
+          <!-- Timer display -->
+          <div id="timerDisplay" style="font-size: 32px; margin-top: 20px; font-weight: 700; color: #79d9ff; text-shadow: 0 0 12px rgba(121,217,255,0.8);">
+            00:00:00
+          </div>
+
+          <!-- Timer buttons -->
+          <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+            <button id="startTimer" class="tool-btn1">Start</button>
+            <button id="stopTimer" class="tool-btn1 decline-btn">Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS DASHBOARD — FULL WIDTH -->
+      <div class="tool-card" style="grid-column: 1 / 4;">
+        <div class="tool-content">
+          <h2>Study Analytics</h2>
+          <p>Your logged study hours across tasks.</p>
+
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-top:10px;">
+            <div>
+              <div style="font-size:14px; margin-bottom:4px;">Range</div>
+              <select id="analyticsRange" class="friend-select long-select" style="max-width:220px;">
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="all">All time</option>
+              </select>
+            </div>
+            <div id="totalHoursSummary" style="font-weight:600; font-size:15px;"></div>
+          </div>
+
+          <div style="margin-top:18px;">
+            <h3 class="mutual-title">Hours per Task</h3>
+            <div id="taskSummary"></div>
+          </div>
+
+          <div style="margin-top:18px;">
+            <h3 class="mutual-title">Breakdown by Day</h3>
+            <div id="daySummary"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+      
+
+    </div> <!-- end tools-grid -->
+  </section>
+
+  <!-- Profile SECTION -->
+  <section id="Profile">
+    <div class="task-card">
+      <h2>Profile</h2>
+      
+      <div class="settings-container">
+        <!-- Avatar Area -->
+        <div style="position: relative;">
+            <img id="settings-avatar" src="https://via.placeholder.com/150" alt="Profile" class="avatar-large">
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <label for="avatar-upload" class="tool-btn1 small-btn" style="cursor: pointer;">Upload Photo</label>
+                <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                <button id="btn-delete-avatar" class="tool-btn1 decline-btn small-btn">Remove</button>
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="info-group">
+            <span class="info-label">Your Unique User ID</span>
+            <span id="settings-user-id" class="info-value">Loading...</span>
+        </div>
+
+        <div class="info-group">
+            <span class="info-label">Account Name</span>
+            <span id="settings-username" class="info-value">Loading...</span>
+        </div>
+        
+        <div class="info-group">
+            <span class="info-label">Email</span>
+            <span id="settings-email" class="info-value">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql # Persists data to a named volume
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_HOST: db # The service name of your Postgres container
+      DATABASE_USER: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      USER_SERVICE_URL: http://127.0.0.1:8000  
+      REDIS_URL: redis://redis:6379
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./
+          target: /app/
+    volumes:
+      - ./:/app/
+      - avatar_data:/app/avatars
+  redis:
+    image: redis:7-alpine
+    container_name: analytics-redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_data: # Defines the named volume for data persistence
+  avatar_data:
+  redis_data:

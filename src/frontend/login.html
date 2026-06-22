@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login – Prioritize</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-container">
+    <h1 class="auth-logo">Prioritize</h1>
+    <h2>Welcome Back</h2>
+    <p>Log in to access your tasks and study schedule.</p>
+
+    <form>
+        <input type="text" class="auth-input" placeholder="Username or Email"> <!-- Changed type to text -->
+        <input type="password" class="auth-input" placeholder="Password">
+        <button type="button" class="auth-btn">Log In</button>
+    </form>
+
+    <div class="auth-link">
+        Don't have an account? <a href="signup.html">Sign up</a>
+    </div>
+</div>
+
+<script>
+    const API_URL = ""; 
+
+    // FORCE CLEAR OLD SESSION ON LOAD
+    localStorage.clear();
+    sessionStorage.clear();
+    console.log("Session cleared on login page load.");
+
+    async function handleLogin() {
+        const inputs = document.querySelectorAll('.auth-input');
+        const nameOrEmail = inputs[0].value;
+        const password = inputs[1].value;
+        const btn = document.querySelector('.auth-btn');
+
+        if(!nameOrEmail || !password) {
+            alert("Please enter username/email and password");
+            return;
+        }
+
+        btn.textContent = "Logging in...";
+        btn.disabled = true;
+
+        // EXPIRY LOGIC 1hr
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+
+        // Format to UTC String for Backend
+        const expiryStr = now.toISOString().slice(0, 19).replace('T', ' ');
+
+        try {
+            const response = await fetch(`${API_URL}/v2/authentications/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: nameOrEmail, 
+                    password: password,
+                    expiry: expiryStr
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                // If password invalid, backend throws 401
+                throw new Error(err.detail || "Login failed");
+            }
+
+            const data = await response.json();
+            
+            // Save fresh token
+            localStorage.setItem('token', data.jwt);
+            console.log("New Token Saved. Expires at:", expiryStr);
+            
+            window.location.href = 'index.html';
+
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert("Login Failed: " + error.message);
+            btn.textContent = "Log In";
+            btn.disabled = false;
+            // Clear inputs on failure
+            inputs[1].value = ""; 
+        }
+    }
+
+    document.querySelector('.auth-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        handleLogin();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up – Prioritize</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-container">
+    <h1>Create Account</h1>
+    <p>Sign up to start organizing your tasks and study plans.</p>
+
+    <form id="signup-form">
+        <input type="text" id="name" class="auth-input" placeholder="Username (e.g. alice)" required>
+        <input type="email" id="email" class="auth-input" placeholder="Email" required>
+        <input type="password" id="password" class="auth-input" placeholder="Password" required>
+        
+        <!-- Removed the <a href> tag so we can handle this with JS -->
+        <button type="submit" class="auth-btn">Create Account</button>
+    </form>
+
+    <div class="auth-link">
+        Already have an account? <a href="login.html">Log in</a>
+    </div>
+</div>
+
+<script>
+    const API_URL = ""; // Relative path
+
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = document.querySelector('.auth-btn');
+
+        btn.disabled = true;
+        btn.textContent = "Creating...";
+
+        try {
+            // 1. Create User
+            const res = await fetch(`${API_URL}/v2/users/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Auto-detect timezone
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || "Signup failed");
+            }
+
+            // 2. Auto Login to get Token
+            // Calculate expiry (1 hour from now)
+            const expiryDate = new Date();
+            expiryDate.setHours(expiryDate.getHours() + 1);
+            const expiryStr = expiryDate.toISOString().slice(0, 19).replace('T', ' ');
+
+            const loginRes = await fetch(`${API_URL}/v2/authentications/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name, // Login uses name (or email depending on logic)
+                    password: password,
+                    expiry: expiryStr
+                })
+            });
+
+            if (loginRes.ok) {
+                const data = await loginRes.json();
+                localStorage.setItem('token', data.jwt); // Save token
+                window.location.href = 'index.html';     // Redirect to dashboard
+            } else {
+                alert("Account created! Please log in.");
+                window.location.href = 'login.html';
+            }
+
+        } catch (error) {
+            alert(error.message);
+            btn.disabled = false;
+            btn.textContent = "Create Account";
+        }
+    });
+</script>
+
+</body>
+</html>
