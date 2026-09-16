@@ -5,12 +5,13 @@
 
 ---
 
-##  Deployment 
+## Live Demo
 
-The application is deployed on Render and is accessible here:
-**[🔗 https://prioritize-09r1.onrender.com/](https://prioritize-09r1.onrender.com/)**
+🚀 [Launch Prioritize](https://prioritize-public-production.up.railway.app/login.html)
 
-*(Note: The server is on a Free Tier instance. It may take 50-60 seconds to wake up upon the first request. Please be patient!)*
+Prioritize is deployed on Railway with a FastAPI backend, PostgreSQL database, and Redis service.
+
+> Create an account or log in to explore task management, smart scheduling, study analytics, calendar export, and collaboration features.
 
 ---
 
